@@ -1,5 +1,11 @@
 // Licensed under the Apache License, Version 2.0
 // Details: https://raw.githubusercontent.com/square/quotaservice/master/LICENSE
+//
+// SPDX-FileCopyrightText: Square, Inc.
+// SPDX-FileCopyrightText: HGLOW MEDIA Inc.
+// SPDX-FileModified: 2025-05-07
+// SPDX-License-Identifier: Apache-2.0
+// Modification: Removed unused github.com/pkg/errors import.
 
 // Package redis implements token buckets backed by Redis, inspired by the algorithms used in Guava's
 // RateLimiter library - https://github.com/google/guava/blob/master/guava/src/com/google/common/util/concurrent/RateLimiter.java
@@ -14,7 +20,6 @@ import (
 
 	"github.com/go-redis/redis/v8"
 
-	"github.com/pkg/errors"
 	"github.com/square/quotaservice"
 	"github.com/square/quotaservice/logging"
 	pbconfig "github.com/square/quotaservice/protos/config"

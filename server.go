@@ -1,5 +1,11 @@
 // Licensed under the Apache License, Version 2.0
 // Details: https://raw.githubusercontent.com/square/quotaservice/master/LICENSE
+//
+// SPDX-FileCopyrightText: Square, Inc.
+// SPDX-FileCopyrightText: HGLOW MEDIA Inc.
+// SPDX-FileModified: 2025-05-07
+// SPDX-License-Identifier: Apache-2.0
+// Modification: Replaced github.com/pkg/errors with standard library error handling.
 
 package quotaservice
 
@@ -12,7 +18,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/pkg/errors"
 	"github.com/square/quotaservice/admin"
 	"github.com/square/quotaservice/config"
 	"github.com/square/quotaservice/events"
@@ -138,7 +143,7 @@ func (s *server) Allow(ctx context.Context, namespace, name string, tokensReques
 	w, success, err := b.Take(ctx, tokensRequested, maxWaitTime)
 	if err != nil {
 		s.Emit(events.NewBucketErrorEvent(namespace, name, b.Dynamic()))
-		return 0, b.Dynamic(), errors.Wrap(err, "failed to take tokens")
+		return 0, b.Dynamic(), fmt.Errorf("failed to take tokens: %w", err)
 	}
 
 	if !success {

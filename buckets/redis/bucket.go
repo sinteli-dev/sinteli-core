@@ -1,5 +1,11 @@
 // Licensed under the Apache License, Version 2.0
 // Details: https://raw.githubusercontent.com/square/quotaservice/master/LICENSE
+//
+// SPDX-FileCopyrightText: Square, Inc.
+// SPDX-FileCopyrightText: HGLOW MEDIA Inc.
+// SPDX-FileModified: 2025-05-07
+// SPDX-License-Identifier: Apache-2.0
+// Modification: Replaced github.com/pkg/errors with standard library error handling.
 
 // Package redis implements token buckets backed by Redis, inspired by the algorithms used in Guava's
 // RateLimiter library - https://github.com/google/guava/blob/master/guava/src/com/google/common/util/concurrent/RateLimiter.java
@@ -7,13 +13,13 @@ package redis
 
 import (
 	"context"
+	"fmt"
 	"strconv"
 	"time"
 
 	"github.com/go-redis/redis/v8"
-
 	"github.com/opentracing/opentracing-go"
-	"github.com/pkg/errors"
+
 	"github.com/square/quotaservice"
 	"github.com/square/quotaservice/logging"
 	pbconfig "github.com/square/quotaservice/protos/config"
@@ -58,7 +64,7 @@ func (a *abstractBucket) Take(ctx context.Context, requested int64, maxWaitTime 
 			logging.Print("Failed to take token from redis because the client was closed, reconnecting")
 			a.factory.handleConnectionFailure(client)
 		}
-		return 0, false, errors.Wrap(err, "failed to take token from redis bucket")
+		return 0, false, fmt.Errorf("failed to take token from redis bucket: %w", err)
 	}
 
 	var waitTime time.Duration
@@ -66,7 +72,7 @@ func (a *abstractBucket) Take(ctx context.Context, requested int64, maxWaitTime 
 	case int64:
 		waitTime = time.Nanosecond * time.Duration(val)
 	default:
-		return 0, false, errors.Errorf("unknown response of type %[1]T: %[1]v", val)
+		return 0, false, fmt.Errorf("unknown response of type %[1]T: %[1]v", val)
 	}
 
 	if waitTime < 0 {

@@ -1,5 +1,7 @@
 module github.com/square/quotaservice
 
+// Modified by HGLOW MEDIA Inc. on 2025-05-07 to remove github.com/pkg/errors dependency.
+
 go 1.16
 
 require (
@@ -16,7 +18,6 @@ require (
 	github.com/mattn/go-sqlite3 v1.9.0 // indirect
 	github.com/opentracing/opentracing-go v1.0.2
 	github.com/ory/dockertest/v3 v3.6.0
-	github.com/pkg/errors v0.8.1
 	github.com/stretchr/testify v1.8.2
 	golang.org/x/net v0.0.0-20210428140749-89ef3d95e781
 	golang.org/x/oauth2 v0.0.0-20170302202304-efb10a30610e // indirect

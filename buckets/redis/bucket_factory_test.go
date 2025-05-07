@@ -1,10 +1,18 @@
+// Licensed under the Apache License, Version 2.0
+// Details: https://raw.githubusercontent.com/square/quotaservice/master/LICENSE
+//
+// SPDX-FileCopyrightText: Square, Inc.
+// SPDX-FileCopyrightText: HGLOW MEDIA Inc.
+// SPDX-FileModified: 2025-05-07
+// SPDX-License-Identifier: Apache-2.0
+// Modification: Replaced github.com/pkg/errors with standard library error handling.
+
 package redis
 
 import (
+	"errors"
 	"fmt"
 	"testing"
-
-	"github.com/pkg/errors"
 )
 
 func TestIsRedisClientClosedError(t *testing.T) {
@@ -19,7 +27,7 @@ func TestIsRedisClientClosedError(t *testing.T) {
 		},
 		{
 			// Test the error wrapped
-			input:        errors.Wrap(fmt.Errorf(redisClientClosedError), "obfuscate"),
+			input:        fmt.Errorf("obfuscate: %w", fmt.Errorf(redisClientClosedError)),
 			isCloseError: true,
 		},
 		{
@@ -29,7 +37,7 @@ func TestIsRedisClientClosedError(t *testing.T) {
 		},
 		{
 			// test not the error wrapped with the text of the error (this should never happen)
-			input:        errors.Wrap(errors.New("just another error"), redisClientClosedError),
+			input:        fmt.Errorf("%s: %w", redisClientClosedError, errors.New("just another error")),
 			isCloseError: false,
 		},
 	}
